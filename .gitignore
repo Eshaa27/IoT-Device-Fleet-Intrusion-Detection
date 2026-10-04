@@ -1,0 +1,22 @@
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Collected authentication/session data and derived datasets
+data/*.csv
+
+# Licensed GeoIP database and generated model artifacts
+*.mmdb
+ml_pipeline/models/*.pkl
+
+# Local service state and logs
+infrastructure/mosquitto/data/
+infrastructure/mosquitto/log/
+*.log
