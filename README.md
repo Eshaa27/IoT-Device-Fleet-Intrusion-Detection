@@ -42,14 +42,13 @@ infrastructure/       Docker Compose and Mosquitto configuration
 device_simulators/    MQTT device publishers and PostgreSQL logger
 honeypot/             Cowrie configuration and setup notes
 database/             PostgreSQL schemas, queries, and setup notes
-ml_pipeline/          Detection and enrichment scripts, saved models
+ml_pipeline/          Detection and enrichment scripts
 dashboard/            Streamlit dashboard
-data/                 Local source and derived CSVs; ignored by Git
 results/charts/       Analysis visualizations
-results/screenshots/  Existing project screenshots
+results/screenshots/  attack_analysis.png, dashboard.png, ML_Implementation.png
 ```
 
-The project also generates files such as `sessions_with_predictions.csv` and `full_enriched_sessions.csv`. Cowrie's database schema should be installed using the official setup instructions for the version and output plugin being deployed.
+Datasets, GeoIP databases, and trained model files are not included. Create a local `data/` directory and provide the required files before running the analysis or dashboard. Cowrie's database schema should be installed using the official setup instructions for the version and output plugin being deployed.
 
 ## Tech Stack
 
@@ -117,21 +116,13 @@ The enrichment script maps observed behavior to techniques including active scan
 ### Top ISPs
 ![Top ISPs](results/charts/top_isps.png)
 
-### Dashboard Screenshots
-
-![Dashboard overview](results/screenshots/dashboard_overview.png)
-
-![Geographic analysis](results/screenshots/dashboard_geographic.png)
-
-![ML detection results](results/screenshots/dashboard_ml_results.png)
-
-![Live threat predictor](results/screenshots/dashboard_predictor.png)
-
-### Project Screenshots
-
-![ML implementation](results/screenshots/ML_Implementation.png)
+### Screenshots
 
 ![Attack analysis](results/screenshots/attack_analysis.png)
+
+![Dashboard](results/screenshots/dashboard.png)
+
+![ML implementation](results/screenshots/ML_Implementation.png)
 
 ## Setup and Reproduction
 
@@ -139,7 +130,7 @@ The enrichment script maps observed behavior to techniques including active scan
 
 - Python 3.10 or newer
 - Docker and Docker Compose
-- Local project CSVs under `data/` for analysis and dashboard use
+- Project CSVs and trained models supplied locally; they are not included in this repository
 - Optional: AbuseIPDB API key and a MaxMind GeoLite2 City database
 
 ### Install
@@ -155,7 +146,7 @@ Edit `.env` with local credentials. It is ignored by Git. Compose reads this fil
 
 ### Run the Dashboard
 
-The dashboard uses local CSV and model files and does not require an AWS connection or a live database.
+The dashboard uses local CSV and model files and does not require an AWS connection or a live database. Those files are not included in this repository; provide the expected files under `data/` and `ml_pipeline/models/` first.
 
 ```powershell
 streamlit run dashboard\dashboard.py
@@ -170,7 +161,7 @@ python ml_pipeline\ml_detection.py
 python ml_pipeline\ip_enrichment.py
 ```
 
-Set `ABUSEIPDB_API_KEY` in `.env` to enable AbuseIPDB lookups. Without a key, enrichment uses neutral/unknown reputation values. GeoIP reads `data/GeoLite2-City.mmdb` when available and otherwise uses the configured fallback. Follow MaxMind's licensing and redistribution terms.
+Set `ABUSEIPDB_API_KEY` in `.env` to enable AbuseIPDB lookups. Without a key, enrichment uses neutral/unknown reputation values. If provided, GeoIP reads `data/GeoLite2-City.mmdb`; otherwise it uses the configured fallback. Follow MaxMind's licensing and redistribution terms.
 
 ### Start Local Services
 
